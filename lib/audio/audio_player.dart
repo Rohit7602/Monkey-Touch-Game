@@ -1,14 +1,20 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:get/get.dart';
 
-class AudioPlayerClass {
-  AudioPlayer player = AudioPlayer();
+class AudioPlayerClass extends GetxController {
+  final AudioPlayer _player = AudioPlayer();
+  AudioPlayer get getPlayer => _player;
 
   startSound() async {
-    await player.play(AssetSource("sound/bg_sound.mp3"));
+    await _player.play(AssetSource("sound/bg_sound.mp3"));
+    _player.onPlayerComplete.listen((event) {
+      startSound();
+    });
+    update();
   }
 
   stopSound() async {
-    await player.stop();
-    await player.dispose();
+    await _player.stop();
+    update();
   }
 }

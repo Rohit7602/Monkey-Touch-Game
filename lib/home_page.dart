@@ -1,10 +1,13 @@
 import 'dart:io';
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gif/flutter_gif.dart';
 import 'package:get/get.dart';
+import 'package:gif/gif.dart';
+import 'package:monkey_touch/Utils/app_images.dart';
 import 'package:monkey_touch/audio/audio_player.dart';
 import 'package:monkey_touch/game_dashboard.dart';
+import 'package:monkey_touch/levels.dart';
+import 'package:monkey_touch/main.dart';
 
 class HomePageView extends StatefulWidget {
   const HomePageView({super.key});
@@ -15,17 +18,24 @@ class HomePageView extends StatefulWidget {
 
 class _HomePageViewState extends State<HomePageView>
     with TickerProviderStateMixin {
-  late FlutterGifController controller1;
-  bool isSound = false;
+  late GifController controller1;
+  bool isSound = true;
 
   @override
   void initState() {
-    controller1 = FlutterGifController(vsync: this);
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      controller1.repeat(
-          min: 1, max: 15, period: const Duration(milliseconds: 1200));
+    controller1 = GifController(vsync: this);
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
+      controller1.repeat(period: const Duration(milliseconds: 1200));
     });
+    initialState();
+
     super.initState();
+  }
+
+  initialState() {
+    var data = Get.find<AudioPlayerClass>();
+    data.startSound();
+    sharedPrefs?.setString("level", "1");
   }
 
   @override
@@ -45,7 +55,7 @@ class _HomePageViewState extends State<HomePageView>
               Positioned(
                 left: 0,
                 top: 0,
-                child: GifImage(
+                child: Gif(
                   image: const AssetImage(
                     "assets/monkey_home.gif",
                   ),
@@ -68,12 +78,14 @@ class _HomePageViewState extends State<HomePageView>
                   children: [
                     BouncingWidget(
                       onPressed: () async {
+                        var data = Get.find<AudioPlayerClass>();
                         if (isSound) {
                           isSound = false;
-                          await AudioPlayerClass().stopSound();
+                          data.stopSound();
                         } else {
                           isSound = true;
-                          await AudioPlayerClass().startSound();
+
+                          data.startSound();
                         }
                         setState(() {});
                       },
@@ -92,6 +104,7 @@ class _HomePageViewState extends State<HomePageView>
               ),
               BouncingWidget(
                 onPressed: () {
+                  // sharedPrefs?.clear();
                   Get.to(const GameDashboardView());
                 },
                 child: Image.asset(
@@ -100,7 +113,28 @@ class _HomePageViewState extends State<HomePageView>
                 ),
               ),
               const SizedBox(
-                height: 20,
+                height: 5,
+              ),
+              BouncingWidget(
+                onPressed: () {
+                  Get.to(AppLevelsView());
+                },
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Image.asset(
+                      AppImages.level_board,
+                      width: 200,
+                    ),
+                    const Text(
+                      "Levels",
+                      style: TextStyle(
+                          fontSize: 30,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white),
+                    )
+                  ],
+                ),
               ),
               BouncingWidget(
                 onPressed: () {
