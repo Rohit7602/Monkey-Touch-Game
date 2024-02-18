@@ -1,4 +1,4 @@
-package com.example.monkey_touch
+package com.game.monkeytouch
 
 import io.flutter.embedding.android.FlutterActivity
 

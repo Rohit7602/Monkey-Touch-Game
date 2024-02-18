@@ -1,3 +1,5 @@
+// ignore_for_file: void_checks
+
 import 'dart:io';
 import 'package:bouncing_widget/bouncing_widget.dart';
 import 'package:flutter/material.dart';
@@ -36,6 +38,9 @@ class _HomePageViewState extends State<HomePageView>
     var data = Get.find<AudioPlayerClass>();
     data.startSound();
     sharedPrefs?.setString("level", "1");
+    Future.delayed(const Duration(milliseconds: 200), () {
+      setState(() {});
+    });
   }
 
   @override
@@ -87,6 +92,7 @@ class _HomePageViewState extends State<HomePageView>
 
                           data.startSound();
                         }
+
                         setState(() {});
                       },
                       child: Image.asset(
