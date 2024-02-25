@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:gif/gif.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:monkey_touch/Google_ads/google_ads.dart';
 import 'package:monkey_touch/Utils/app_images.dart';
 import 'package:monkey_touch/main.dart';
 
@@ -54,11 +55,6 @@ class _GameDashboardViewState extends State<GameDashboardView>
     WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       controller1.repeat(period: const Duration(milliseconds: 1200));
     });
-    // controller1 = FlutterGifController(vsync: this);
-    // WidgetsBinding.instance.addPostFrameCallback((_) {
-    //   controller1.repeat(
-    //       min: 1, max: 5, period: const Duration(milliseconds: 300));
-    // });
 
     super.initState();
   }
@@ -83,8 +79,6 @@ class _GameDashboardViewState extends State<GameDashboardView>
             children: [
               Image.asset(
                 "assets/game_img/game_dashboard.jpg",
-                // "https://static.vecteezy.com/system/resources/previews/011/813/877/original/illustration-of-tropical-jungle-background-free-vector.jpg",
-                // "https://media.istockphoto.com/id/166053319/vector/vector-cartoon-jungle-background-with-vines-and-palm-trees.jpg?s=612x612&w=0&k=20&c=tHnsMYuONFmuzll2vlqk8nNkQJKThKVi1s3UHxdIwMQ=",
                 fit: BoxFit.cover,
                 height: Get.height,
                 width: Get.width,
@@ -120,6 +114,11 @@ class _GameDashboardViewState extends State<GameDashboardView>
                                   showGameOver = true;
 
                                   timer!.cancel();
+
+                                  Future.delayed(const Duration(seconds: 2),
+                                      () {
+                                    AdsController.createRewardedAd();
+                                  });
                                 });
                               } else {
                                 if (number == i) {
@@ -155,14 +154,6 @@ class _GameDashboardViewState extends State<GameDashboardView>
                                         width: 100,
                                       )
                                     : const SizedBox(),
-                                // number == i
-                                //     ? GifImage(
-                                //         image: const AssetImage(
-                                //             "assets/gif/monkey.gif"),
-                                //         controller: controller1,
-                                //         width: 100,
-                                //       )
-                                //     : const SizedBox(),
                               ],
                             ),
                           ),

@@ -3,9 +3,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:monkey_touch/Bindings/main_bindings.dart';
 import 'package:monkey_touch/audio/audio_player.dart';
+import 'package:monkey_touch/demo_app.dart';
 import 'package:monkey_touch/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -13,7 +14,11 @@ SharedPreferences? sharedPrefs;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await MobileAds.instance.initialize();
+  RequestConfiguration requestConfiguration =
+      RequestConfiguration(testDeviceIds: ["13A0CEA17E9A2C088CC80C687E56732A"]);
   sharedPrefs = await SharedPreferences.getInstance();
+  MobileAds.instance.updateRequestConfiguration(requestConfiguration);
 
   runApp(const MyApp());
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
@@ -57,13 +62,11 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
   stopSound() {
     var data = Get.put(AudioPlayerClass());
-
     data.stopSound();
   }
 
   startSound() {
     var data = Get.put(AudioPlayerClass());
-
     data.startSound();
   }
 
